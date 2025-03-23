@@ -1,34 +1,95 @@
 import React, { useState, useEffect } from "react";
-import "./Calendar.css";
-import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faPlus, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import "./Calendar.css";
 
 interface EventItem {
-  _id: string;
   title: string;
   time: string;
 }
 
 interface Event {
-  _id: string;
   day: number;
   month: number;
   year: number;
   events: EventItem[];
 }
 
-const Calendar = () => {
+const EventPopup: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (event: EventItem) => void;
+}> = ({ isOpen, onClose, onSave }) => {
+  const [title, setTitle] = useState("");
+  const [time, setTime] = useState("");
+
+  const handleSave = () => {
+    if (title && time) {
+      onSave({ title, time });
+      setTitle("");
+      setTime("");
+      onClose();
+    } else {
+      alert("Please fill in all fields.");
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="event-popup-overlay">
+      <div className="event-popup">
+        <h2>Add Event</h2>
+        <input
+          type="text"
+          placeholder="Event Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="time"
+          placeholder="Event Time"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+        />
+        <div className="popup-buttons">
+          <button onClick={handleSave}>Save</button>
+          <button onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Calendar: React.FC = () => {
   const [today] = useState(new Date());
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
   const [activeDay, setActiveDay] = useState(today.getDate());
   const [eventsArr, setEventsArr] = useState<Event[]>([]);
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventTimeFrom, setEventTimeFrom] = useState("");
-  const [eventTimeTo, setEventTimeTo] = useState("");
-  const [showEventForm, setShowEventForm] = useState(false);
   const [gotoDateInput, setGotoDateInput] = useState("");
+  const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   useEffect(() => {
     const savedEvents = localStorage.getItem("events");
@@ -41,94 +102,70 @@ const Calendar = () => {
     localStorage.setItem("events", JSON.stringify(eventsArr));
   }, [eventsArr]);
 
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
   const initCalendar = () => {
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
-    const prevLastDate = new Date(year, month, 0).getDate();
-    const nextDays = 7 - new Date(year, month + 1, 0).getDay() - 1;
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const prevLastDay = new Date(year, month, 0);
+    const prevDays = prevLastDay.getDate();
+    const lastDate = lastDay.getDate();
+    const day = firstDay.getDay();
+    const nextDays = 7 - lastDay.getDay() - 1;
 
     let days = [];
-    for (let x = firstDay; x > 0; x--) {
+    for (let x = day; x > 0; x--) {
       days.push(
-        <motion.div className="day prev-date" key={`prev-${x}`} onClick={prevMonth}>
-          {prevLastDate - x + 1}
-        </motion.div>
+        <div key={`prev-${x}`} className="day prev-date" onClick={prevMonth}>
+          {prevDays - x + 1}
+        </div>
       );
     }
+
     for (let i = 1; i <= lastDate; i++) {
-      let event = eventsArr.find(event => event.day === i && event.month === month + 1 && event.year === year);
+      const event = eventsArr.find(
+        (event) =>
+          event.day === i && event.month === month + 1 && event.year === year
+      );
       days.push(
-        <motion.div
+        <div
           key={i}
-          className={`day ${activeDay === i ? "selected" : ""} ${event ? "event" : ""}`}
-          onClick={() => setActiveDay(i)}
-          whileHover={{ scale: 1.1 }}
+          className={`day ${activeDay === i ? "active" : ""} ${
+            event ? "event" : ""
+          }`}
+          onClick={() => {
+            setActiveDay(i);
+            updateEvents(i);
+          }}
         >
           {i}
-        </motion.div>
+        </div>
       );
     }
+
     for (let j = 1; j <= nextDays; j++) {
       days.push(
-        <motion.div className="day next-date" key={`next-${j}`} onClick={nextMonth}>
+        <div key={`next-${j}`} className="day next-date" onClick={nextMonth}>
           {j}
-        </motion.div>
+        </div>
       );
     }
+
     return days;
   };
 
-  const addEvent = () => {
-    if (!eventTitle || !eventTimeFrom || !eventTimeTo) {
-      alert("Please fill all fields");
-      return;
-    }
-
-    const newEvent = {
-      _id: Math.random().toString(36).substr(2, 9),
-      title: eventTitle,
-      time: `${eventTimeFrom} - ${eventTimeTo}`,
-    };
-
-    setEventsArr(prevEvents => {
-      let updatedEvents = [...prevEvents];
-      let existingEvent = updatedEvents.find(event => event.day === activeDay && event.month === month + 1 && event.year === year);
-
-      if (existingEvent) {
-        existingEvent.events.push(newEvent);
-      } else {
-        updatedEvents.push({
-          _id: Math.random().toString(36).substr(2, 9),
-          day: activeDay,
-          month: month + 1,
-          year: year,
-          events: [newEvent],
-        });
-      }
-
-      return updatedEvents;
-    });
-
-    setEventTitle("");
-    setEventTimeFrom("");
-    setEventTimeTo("");
-    setShowEventForm(false);
+  const prevMonth = () => {
+    setMonth((prev) => (prev === 0 ? 11 : prev - 1));
+    if (month === 0) setYear((prev) => prev - 1);
   };
 
-  const deleteEvent = (eventId: string) => {
-    setEventsArr(prevEvents =>
-      prevEvents
-        .map(event => ({
-          ...event,
-          events: event.events.filter(e => e._id !== eventId),
-        }))
-        .filter(event => event.events.length > 0)
-    );
+  const nextMonth = () => {
+    setMonth((prev) => (prev === 11 ? 0 : prev + 1));
+    if (month === 11) setYear((prev) => prev + 1);
+  };
+
+  const goToToday = () => {
+    setMonth(today.getMonth());
+    setYear(today.getFullYear());
+    setActiveDay(today.getDate());
   };
 
   const gotoDate = () => {
@@ -142,28 +179,38 @@ const Calendar = () => {
     }
   };
 
-  const prevMonth = () => {
-    setMonth(prev => (prev === 0 ? 11 : prev - 1));
-    if (month === 0) setYear(prev => prev - 1);
+  const updateEvents = (date: number) => {
+    const day = new Date(year, month, date);
+    const dayName = day.toString().split(" ")[0];
+    const eventDate = `${date} ${months[month]} ${year}`;
+    console.log("Active Day:", dayName, eventDate);
   };
 
-  const nextMonth = () => {
-    setMonth(prev => (prev === 11 ? 0 : prev + 1));
-    if (month === 11) setYear(prev => prev + 1);
-  };
+  const handleSaveEvent = (event: EventItem) => {
+    const newEvent: Event = {
+      day: activeDay,
+      month: month + 1,
+      year: year,
+      events: [event],
+    };
 
-  const goToToday = () => {
-    setMonth(today.getMonth());
-    setYear(today.getFullYear());
-    setActiveDay(today.getDate());
-  };
+    const existingEventIndex = eventsArr.findIndex(
+      (e) => e.day === activeDay && e.month === month + 1 && e.year === year
+    );
 
-  const getEventsForActiveDay = () => {
-    return eventsArr.find(event => event.day === activeDay && event.month === month + 1 && event.year === year)?.events || [];
+    if (existingEventIndex !== -1) {
+      // If an event already exists for this date, append the new event
+      const updatedEvents = [...eventsArr];
+      updatedEvents[existingEventIndex].events.push(event);
+      setEventsArr(updatedEvents);
+    } else {
+      // If no event exists for this date, add a new event
+      setEventsArr([...eventsArr, newEvent]);
+    }
   };
 
   return (
-    <motion.div className="Calendar-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+    <div className="container">
       <div className="left">
         <div className="calendar">
           <div className="month">
@@ -172,38 +219,60 @@ const Calendar = () => {
             <FontAwesomeIcon icon={faAngleRight} className="next" onClick={nextMonth} />
           </div>
           <div className="weekdays">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => <div key={day}>{day}</div>)}
+            {weekdays.map((day) => (
+              <div key={day}>{day}</div>
+            ))}
           </div>
           <div className="days">{initCalendar()}</div>
+          <div className="goto-today">
+            <div className="goto">
+              <input
+                type="text"
+                placeholder="mm/yyyy"
+                value={gotoDateInput}
+                onChange={(e) => setGotoDateInput(e.target.value)}
+              />
+              <button className="goto-btn" onClick={gotoDate}>Go</button>
+            </div>
+            <button className="today-btn" onClick={goToToday}>Today</button>
+          </div>
         </div>
       </div>
       <div className="right">
-        <button onClick={goToToday}>Today</button>
-        <input type="text" placeholder="mm/yyyy" value={gotoDateInput} onChange={(e) => setGotoDateInput(e.target.value)} />
-        <button onClick={gotoDate}>Go</button>
-
-        <div className="events">
-          {getEventsForActiveDay().length > 0 ? getEventsForActiveDay().map(event => (
-            <div className="event" key={event._id}>
-              <h3>{event.title}</h3>
-              <span>{event.time}</span>
-              <FontAwesomeIcon icon={faTrash} onClick={() => deleteEvent(event._id)} />
-            </div>
-          )) : <h3>No Events</h3>}
+        <div className="today-date">
+          <div className="event-day">{new Date(year, month, activeDay).toString().split(" ")[0]}</div>
+          <div className="event-date">{activeDay} {months[month]} {year}</div>
         </div>
-
-        <button className="add-event" onClick={() => setShowEventForm(!showEventForm)}>+</button>
-
-        {showEventForm && (
-          <div className="event-form">
-            <input type="text" placeholder="Event Title" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} />
-            <input type="time" value={eventTimeFrom} onChange={(e) => setEventTimeFrom(e.target.value)} />
-            <input type="time" value={eventTimeTo} onChange={(e) => setEventTimeTo(e.target.value)} />
-            <button onClick={addEvent}>Add</button>
-          </div>
-        )}
+        <div className="events">
+          {eventsArr
+            .find(
+              (event) =>
+                event.day === activeDay &&
+                event.month === month + 1 &&
+                event.year === year
+            )
+            ?.events.map((event, index) => (
+              <div key={index} className="event">
+                <div className="title">
+                  <FontAwesomeIcon icon={faCircle} />
+                  <h3 className="event-title">{event.title}</h3>
+                </div>
+                <div className="event-time">
+                  <span>{event.time}</span>
+                </div>
+              </div>
+            )) || <div className="no-event">No Events</div>}
+        </div>
+        <button className="add-event-btn" onClick={() => setIsEventPopupOpen(true)}>
+          Add Event
+        </button>
       </div>
-    </motion.div>
+      <EventPopup
+        isOpen={isEventPopupOpen}
+        onClose={() => setIsEventPopupOpen(false)}
+        onSave={handleSaveEvent}
+      />
+    </div>
   );
 };
 
