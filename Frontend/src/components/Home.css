@@ -1,0 +1,181 @@
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 🌟 Light Gradient (Text: Black) */
+.gradient-light {
+    background: linear-gradient(-45deg, 
+        #ffdde1, #ee9ca7, #ffefef, #ffdde1, 
+        #ff9a9e, #fecfef, #e0c3fc, #a1c4fd
+    );
+    background-size: 500% 500%;
+    animation: gradientAnimation 12s ease infinite;
+    color: black; /* Black text */
+}
+
+/* 🔥 Medium Gradient (Text: White) */
+.gradient-medium {
+    background: linear-gradient(-45deg, 
+        #e76064, #f08b6f, #ff758c, #bb6086, 
+        #ed4e3f, #ff99ac, #ffdde1, #a43dd8
+    );
+    background-size: 500% 500%;
+    animation: gradientAnimation 12s ease infinite;
+    color: white; /* White text */
+}
+
+/* 🌑 Dark Gradient (Text: White) */
+.gradient-dark {
+    background: linear-gradient(-45deg, 
+        #034068, #12014d, #1a2a6c, #6f2a05, 
+        #141e30, #034a68, #04709e, #2b5876
+    );
+    background-size: 500% 500%;
+    animation: gradientAnimation 12s ease infinite;
+    color: white; /* White text */
+}
+
+
+body{
+    background-size: 500% 500%;  /* Increases animation effect */
+    animation: gradientAnimation 12s ease infinite;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    max-height:100vh; /* Full viewport height */
+    margin: 0;
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+    
+   
+}
+/* Center Content */
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    text-align: center;
+    
+ 
+
+}
+
+
+.h1 {
+    position: relative;
+    display: inline-block;
+    font-size: 4.7rem;
+    text-align: center;
+    
+  }
+  
+.h1::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    width: 0%;  /* Start with no underline */
+    height: 3px;
+    background-color: white;
+    transition: width 0.5s ease-in-out, left 0.5s ease-in-out;
+  }
+  
+  .h1:hover::after {
+    width: 100%;  /* Expand to full text width */
+    left: 0;
+  }
+  h2{
+    font-size: 2.7rem;
+  }
+
+/* Floating Icon Button (Bottom Left) */
+.floating-icon-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.8); /* Light background for visibility */
+    padding: 8px;
+    border-radius: 50%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.floating-icon-button:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 1);
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+.floating-icon-button:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Moon Icon Styling */
+.moon-icon {
+    width: 35px; /* Adjust size */
+    height: 35px;
+}
+.about-icon {
+    width: 60px;
+    height: 60px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: rgb(253, 250, 250);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .get-started-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .get-started-button:hover {
+    background-color: #0056b3;
+  }

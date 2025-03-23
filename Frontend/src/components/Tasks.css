@@ -1,0 +1,239 @@
+/* Ensure the table page fills the full screen */
+.table-page {
+  min-height: 100vh;
+  width: 100vw; /* Ensure it takes the full width */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content */
+  align-items: center; /* Align content */
+  background: linear-gradient(45deg, #21e00f, #3ce8b5, #08847d, #e3f51a);
+  background-size: 400% 400%;
+  animation: gradientBG 10s infinite alternate;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Make sure table stretches properly */
+.table-container {
+  width: 100%;
+  max-width: 1200px; /* Adjust max width as needed */
+  background: rgba(255, 255, 255, 0);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  overflow-x: auto; /* Ensure table scrolls if needed */
+}
+
+/* Full-width table */
+.table-page table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(2, 0, 0, 0.959);
+}
+
+/* Style table headers and cells */
+.table-page table th,
+.table-page table td {
+  padding: 16px;
+  border-bottom: 1px solid #fbf4f4;
+  text-align: left;
+  color: white;
+}
+
+.table-page table th {
+  background: rgba(0, 128, 0, 0);
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+  .table-container {
+    width: 95%;
+  }
+
+  .table-page {
+    padding: 10px;
+  }
+
+  .table-page table th,
+  .table-page table td {
+    padding: 10px;
+  }
+}
+
+/* Moves only the text down */
+header h1 {
+  margin-top: 50px;
+  color: green;
+}
+
+/* Ensures content starts below the fixed header */
+.content {
+  margin-top: 100px; /* Adjust based on header height */
+  padding: 20px;
+}
+
+/* Main Container */
+main {
+  max-width: 900px;
+  width: 90%;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 25px;
+  margin: auto;
+  margin-top: 40px; /* Adds space below the header */
+}
+
+/* Ensure scrolling works */
+html, body {
+  overflow-y: auto;
+}
+
+/* Task Form */
+.task-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+.content-container{
+    padding-top:-20px;
+}
+.task-form input,
+.task-form select {
+  padding: 12px;
+  border: 2px solid #ddd;
+  font-size: 16px;
+  flex: 1;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.task-form input:focus,
+.task-form select:focus {
+  border-color: green;
+  outline: none;
+}
+
+/* Buttons */
+Table.button {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, green, darkgreen);
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Mark as Done Button */
+.mark-done {
+  background: crimson;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.mark-done:hover {
+  transform: scale(1.05);
+}
+
+/* Task List */
+.task-list {
+  border: 1px solid #ddd;
+  padding: 12px;
+  background: rgba(244, 239, 239, 0.9);
+  border-radius: 10px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  margin-top: 15px;
+  background: rgb(2, 0, 0);
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 16px;
+  border-bottom: 1px solid #fbf4f4;
+  text-align: left;
+}
+
+table th {
+  background: rgba(0, 128, 0, 0.1);
+  color: green;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Completed Tasks */
+.completed-task-list {
+  margin-top: 20px;
+}
+
+.completed-task {
+  padding: 12px;
+  border: 2px solid crimson;
+  border-radius: 8px;
+  background: #22e722;
+}
+
+/* Headings */
+h2 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.cheading {
+  color: rgb(54, 54, 54);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  main {
+      width: 95%;
+      padding: 20px;
+  }
+
+  .task-form {
+      flex-direction: column;
+  }
+
+  button {
+      width: 100%;
+  }
+}
+.remove-task {
+  padding: 8px 12px;
+  background: red;
+  color: white;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.remove-task:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}

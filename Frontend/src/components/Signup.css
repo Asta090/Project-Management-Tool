@@ -1,0 +1,90 @@
+/* Signup.css */
+
+.home-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Background Video */
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Transparent Modal Content */
+.content{
+  background: rgba(255, 255, 255, 0.15); /* Light transparency */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  -webkit-backdrop-filter: blur(20px); /* Safari support */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.619);
+  text-align: center;
+  width: 350px;
+  color: white;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  top: -60px; /
+}
+/* Form Styling */
+.signup-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  background: rgb(11, 0, 0); /* Semi-transparent background */
+  color: rgb(250, 241, 241);
+}
+
+.signup-form input::placeholder {
+  color: rgba(239, 233, 233, 0.774); /* Brighter text for visibility */
+}
+
+/* Button Styling */
+.get-started-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background: rgb(0, 5, 9);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.get-started-button:hover {
+  background: rgb(0, 4, 8);
+}
+
+/* Login Link */
+.login-link {
+  display: block;
+  margin-top: 15px;
+  color: rgb(8, 0, 0);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.login-link span {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.login-link:hover {
+  color: rgb(8, 56, 231);
+}
