@@ -1,108 +1,54 @@
-# Project-Management-Tool
+# React + TypeScript + Vite
 
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-# Project Management Tool
+Currently, two official plugins are available:
 
-## Overview
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-This is a lightweight Project Management Tool inspired by Trello. It allows users to manage projects efficiently using a Kanban-style board. The application includes user authentication, project creation, task management, and commenting features.
+## Expanding the ESLint configuration
 
-## Features
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-### Frontend (React)
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-- User Authentication (Sign-up, Login, Logout)
-- Project Dashboard:
-  - Create, update, delete projects
-  - View a list of projects
-- Project Boards:
-  - Kanban-style board with at least three stages (To-Do, In-Progress, Completed)
-  - Drag-and-drop functionality for moving tasks between stages
-  - CRUD operations on tasks
-- Comments & Attachments:
-  - Users can add comments and upload attachments to each task
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-### Backend (Node.js or Python)
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-- RESTful API:
-  - JWT-based user authentication
-  - CRUD operations for projects, tasks, comments, and file uploads
-- Data Validation:
-  - Validate inputs for user registration, login, and task creation
-- File Uploads:
-  - Secure handling of file attachments
-
-### Database (MongoDB)
-
-- Schema Design:
-  - Schemas for Users, Projects, Tasks, and Comments
-  - Includes timestamps and relations between collections
-
-## Installation
-
-### Prerequisites
-
-- Node.js (if using Node.js backend)
-- Python (if using Django or Flask backend)
-- MongoDB
-
-### Setup Instructions
-
-#### Backend
-
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/project-management-tool.git
-   cd project-management-tool/backend
-   ```
-2. Install dependencies:
-   ```sh
-   npm install  # for Node.js backend
-   pip install -r requirements.txt  # for Python backend
-   ```
-3. Configure environment variables:
-   ```sh
-   cp .env.example .env
-   ```
-4. Start the backend server:
-   ```sh
-   npm start  # for Node.js backend
-   python manage.py runserver  # for Django backend
-   ```
-
-#### Frontend
-
-1. Navigate to the frontend directory:
-   ```sh
-   cd ../frontend
-   ```
-2. Install dependencies:
-   ```sh
-   npm install
-   ```
-3. Start the frontend server:
-   ```sh
-   npm start
-   ```
-
-## Usage
-
-1. Sign up and log in to the application.
-2. Create a new project and access the Kanban board.
-3. Add, update, and delete tasks within each project.
-4. Drag and drop tasks between stages.
-5. Comment on tasks and upload attachments.
-
-## Tech Stack
-
-- **Frontend:** React, React-DnD
-- **Backend:** Node.js (Express) or Python (Django/Flask)
-- **Database:** MongoDB
-- **Authentication:** JWT
-
-## Contributing
-
-Feel free to submit issues and pull requests to improve this project.
-
-##
-
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+```
