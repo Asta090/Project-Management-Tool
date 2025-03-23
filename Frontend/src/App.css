@@ -1,0 +1,9 @@
+/* Prevent overlap by adding top padding */
+.page-content {
+  padding-top: 70px; /* Adjust based on navbar height */
+}
+
+/* No padding for Home since navbar is transparent */
+.page-content-home {
+  padding-top: 0;
+}
